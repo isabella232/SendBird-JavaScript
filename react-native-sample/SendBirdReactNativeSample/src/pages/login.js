@@ -88,7 +88,14 @@ export default class Login extends Component {
           });
         }
       }
-
+      user.createMetaData({
+        company: '31T'
+      }, function (response, error) {
+        if (error) {
+          console.log(error);
+          return;
+        }
+      });
       sb.updateCurrentUserInfo(_SELF.state.username, '', function(response, error) {
         _SELF.setState({
           buttonDisabled: false,
@@ -96,6 +103,7 @@ export default class Login extends Component {
           errorMessage: ''
         });
       });
+      _SELF.props.navigator.push({name: 'groupChannel'});
     });
   }
 
@@ -134,6 +142,7 @@ export default class Login extends Component {
         <View style={styles.loginContainer}>
           <TextInput
             style={styles.input}
+            underlineColorAndroid={'transparent'}
             value={this.state.userId}
             onChangeText={(text) => this.setState({userId: text})}
             onSubmitEditing={Keyboard.dismiss}
@@ -143,6 +152,7 @@ export default class Login extends Component {
             />
           <TextInput
             style={[styles.input, {marginTop: 10}]}
+            underlineColorAndroid={'transparent'}
             value={this.state.username}
             onChangeText={(text) => this.setState({username: text})}
             onSubmitEditing={Keyboard.dismiss}
@@ -158,19 +168,6 @@ export default class Login extends Component {
           />
 
           <Text style={styles.errorLabel}>{this.state.errorMessage}</Text>
-          <Button
-            text={'Group Channel'}
-            style={this._buttonStyle()}
-            disabled={this.state.buttonDisabled}
-            onPress={this._onPressGroupChannel}
-          />
-          <Button
-            text={'Open Channel'}
-            style={this._buttonStyle()}
-            disabled={this.state.buttonDisabled}
-            onPress={this._onPressOpenChannel}
-          />
-
         </View>
       </LoginView>
     );
