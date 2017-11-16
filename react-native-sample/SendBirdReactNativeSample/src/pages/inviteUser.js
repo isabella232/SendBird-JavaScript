@@ -30,6 +30,8 @@ export default class InviteUser extends Component {
       inviteList: []
     };
     this._onUserPress = this._onUserPress.bind(this);
+    this.state.listQuery.metaDataKey = 'company';
+    this.state.listQuery.metaDataValues = ['31T'];
   }
 
   componentWillMount() {
@@ -84,6 +86,11 @@ export default class InviteUser extends Component {
 
   _getUserList() {
     var _SELF = this;
+    var currentMemberIds = [];
+    if (_SELF.state.channel) {
+      currentMemberIds = _SELF.state.channel.members.map(function(user) {return user.userId});
+    }
+
     this.state.listQuery.next(function(response, error) {
       if (error) {
         console.log('Get User List Fail.', error);
@@ -92,7 +99,7 @@ export default class InviteUser extends Component {
 
       var _response = response.filter((user) => {
         user.check = false;
-        return user.userId !== sb.currentUser.userId;
+        return user.userId !== sb.currentUser.userId && !currentMemberIds.includes(user.userId);
       });
       _SELF.setState({list: _SELF.state.list.concat(_response)}, () => {
         _SELF.setState({

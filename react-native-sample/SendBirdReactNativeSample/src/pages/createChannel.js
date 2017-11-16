@@ -71,6 +71,7 @@ export default class CreateChannel extends Component {
            />
         <View style={styles.createContainer}>
           <TextInput
+            underlineColorAndroid={'transparent'}
             style={styles.textInput}
             value={this.state.channelName}
             onChangeText={this._onChangeText}
