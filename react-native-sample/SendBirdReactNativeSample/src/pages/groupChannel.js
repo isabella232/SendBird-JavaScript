@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import {
   View,
   Text,
@@ -7,7 +7,8 @@ import {
   TouchableHighlight,
   Alert,
   StyleSheet
-} from 'react-native'
+} from 'react-native';
+import ActionButton from 'react-native-action-button';
 
 import { CachedImage } from 'react-native-cached-image';
 import {APP_ID, PULLDOWN_DISTANCE} from '../consts';
@@ -194,12 +195,16 @@ export default class GroupChannel extends Component {
             _SELF.setState({editMode: true});
           }},
           {text: 'Create', onPress: () => {
-            _SELF.props.navigator.push({name: 'inviteUser', _onHideChannel: _SELF._onHideChannel, refresh: _SELF._refreshChannelList, });
+            _SELF._onCreateChannel();
           }},
           {text: 'Cancel'}
         ]
       )
     }
+  }
+
+  _onCreateChannel() {
+    this.props.navigator.push({name: 'inviteUser', _onHideChannel: this._onHideChannel, refresh: this._refreshChannelList, });
   }
 
   render() {
@@ -242,6 +247,10 @@ export default class GroupChannel extends Component {
             }
           />
         </View>
+        <ActionButton
+          buttonColor="rgba(50,117,183,1)"
+          onPress={() => {this._onCreateChannel()}}
+        />
       </View>
     )
   }

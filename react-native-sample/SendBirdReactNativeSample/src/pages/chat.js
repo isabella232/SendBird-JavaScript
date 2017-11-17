@@ -92,6 +92,13 @@ export default class Chat extends Component {
           }
         }
       };
+      // ChannelHandler.onUserLeft = function(channel, user) {
+      //   _SELF._channelUpdate(channel);
+      // };
+      // ChannelHandler.onUserLeft = function(channel, user) {
+      //   _SELF._channelUpdate(channel);
+      // };
+
 
       sb.addChannelHandler('ChatView', ChannelHandler);
 
@@ -408,7 +415,7 @@ export default class Chat extends Component {
           <TextInput
             style={styles.textInput}
             underlineColorAndroid={'transparent'}
-            placeholder={'Please type message...'}
+            placeholder={'Write a message'}
             ref='textInput'
             onChangeText={this._onChangeText}
             value={this.state.text}
@@ -419,7 +426,7 @@ export default class Chat extends Component {
             style={styles.sendButton}
             onPress={this._onSend}
             disabled={this.state.disabled}
-          >{'send'}</Button>
+          >{'Send'}</Button>
         </View>
       </ChatView>
     )
