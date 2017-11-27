@@ -6,7 +6,8 @@ import {
   StyleSheet,
   Platform,
   Keyboard,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  AsyncStorage
 } from 'react-native'
 
 const LoginView = Platform.select({
@@ -25,7 +26,8 @@ export default class Login extends Component {
       userId: '',
       username: '',
       connectLabel: 'CONNECT',
-      buttonDisabled: true,
+      connected: false,
+      buttonDisabled: false,
       errorMessage: ''
     };
     this._onPressConnect = this._onPressConnect.bind(this);
@@ -33,10 +35,23 @@ export default class Login extends Component {
     this._onPressGroupChannel = this._onPressGroupChannel.bind(this)
   }
 
+  componentWillMount() {
+    AsyncStorage.multiGet(['userId', 'username']).then((data) => {
+      console.log(data);
+      if(data[0][1] && data[1][1]) {
+        this.setState({
+          userId: data[0][1],
+          username: data[1][1]
+        })
+        this._connect();
+      }
+    });
+  }
+
   _onPressConnect() {
     Keyboard.dismiss();
 
-    if (!this.state.buttonDisabled) {
+    if (this.state.connected) {
       this._onPressDisconnect();
       return;
     }
@@ -59,7 +74,14 @@ export default class Login extends Component {
       });
       return;
     }
+    this._connect();
+  }
 
+  _connect() {
+    this.setState({
+      buttonDisabled: true,
+      connectLabel: 'CONNECTING...'
+    });
     sb = SendBird.getInstance();
     var _SELF = this;
     sb.connect(_SELF.state.userId, function (user, error) {
@@ -67,7 +89,8 @@ export default class Login extends Component {
         _SELF.setState({
           userId: '',
           username: '',
-          errorMessage: 'Login Error'
+          errorMessage: 'Login Error',
+          buttonDisabled: false
         });
         console.log(error);
         return;
@@ -99,9 +122,13 @@ export default class Login extends Component {
       sb.updateCurrentUserInfo(_SELF.state.username, '', function(response, error) {
         _SELF.setState({
           buttonDisabled: false,
+          connected: true,
           connectLabel: 'DISCONNECT',
           errorMessage: ''
         });
+      });
+      AsyncStorage.multiSet([['userId', _SELF.state.userId], ['username', _SELF.state.username]], cb => {
+        console.log(cb);
       });
       _SELF.props.navigator.push({name: 'groupChannel'});
     });
@@ -117,20 +144,21 @@ export default class Login extends Component {
 
   _onPressDisconnect() {
     sb.disconnect();
+    AsyncStorage.multiRemove(['userId', 'username']);
     this.setState({
       userId: '',
       username: '',
       errorMessage: '',
-      buttonDisabled: true,
+      connected: false,
       connectLabel: 'CONNECT'
     });
   }
 
   _buttonStyle() {
     return {
-      backgroundColor: '#6E5BAA',
+      backgroundColor: '#f46b40',
       underlayColor: '#51437f',
-      borderColor: '#6E5BAA',
+      borderColor: '#f46b40',
       disabledColor: '#ababab',
       textColor: '#ffffff'
     }
@@ -146,7 +174,7 @@ export default class Login extends Component {
             value={this.state.userId}
             onChangeText={(text) => this.setState({userId: text})}
             onSubmitEditing={Keyboard.dismiss}
-            placeholder={'Enter User ID'}
+            placeholder={'Enter Employee ID'}
             maxLength={12}
             multiline={false}
             />
@@ -156,13 +184,14 @@ export default class Login extends Component {
             value={this.state.username}
             onChangeText={(text) => this.setState({username: text})}
             onSubmitEditing={Keyboard.dismiss}
-            placeholder={'Enter User Nickname'}
+            placeholder={'Create Chat Username'}
             maxLength={12}
             multiline={false}
             />
 
           <Button
             text={this.state.connectLabel}
+            disabled={this.state.buttonDisabled}
             style={this._buttonStyle()}
             onPress={this._onPressConnect}
           />
@@ -190,7 +219,7 @@ const styles = StyleSheet.create({
     color: '#555555',
     padding: 10,
     height: 50,
-    borderColor: '#6E5BAA',
+    borderColor: '#409ddb',
     borderWidth: 1,
     borderRadius: 4,
     alignSelf: 'center',
