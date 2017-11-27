@@ -22,7 +22,7 @@ export default class TopBar extends Component {
       <View style={styles.container}>
         <View style={styles.leftButton}>
           <ImageButton
-            underlayColor={'#4e4273'}
+            underlayColor={'#409ddb'}
             onPress={this.props.onBackPress}
             imageStyle={styles.imageButton}
             image={backIcon}
@@ -44,7 +44,7 @@ export default class TopBar extends Component {
     if (this.props.onCreateOpenChannel) {
       return (
         <ImageButton
-          underlayColor={'#4e4273'}
+          underlayColor={'#409ddb'}
           onPress={this.props.onCreateOpenChannel}
           imageStyle={[styles.imageButton, {width: 20, height: 20}]}
           image={addIcon}
@@ -53,7 +53,7 @@ export default class TopBar extends Component {
     } else if (this.props.onOpenMenu) {
         return (
           <ImageButton
-            underlayColor={'#4e4273'}
+            underlayColor={'#409ddb'}
             onPress={this.props.onOpenMenu}
             imageStyle={[styles.imageButton, {width: 30, height: 30}]}
             image={listIcon}
@@ -62,7 +62,7 @@ export default class TopBar extends Component {
     } else if (this.props.onGroupChannel) {
       return (
         <ImageButton
-          underlayColor={'#4e4273'}
+          underlayColor={'#409ddb'}
           onPress={this.props.onGroupChannel}
           imageStyle={[styles.imageButton, {width: 30, height: 30}]}
           image={listIcon}
@@ -71,7 +71,7 @@ export default class TopBar extends Component {
     } else if (this.props.onInvite) {
       return (
         <ImageButton
-          underlayColor={'#4e4273'}
+          underlayColor={'#409ddb'}
           onPress={this.props.onInvite}
           imageStyle={[styles.imageButton, {width: 20, height: 20}]}
           image={addIcon}
@@ -88,8 +88,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    backgroundColor: '#4e4273',
-    paddingTop: 20,
+    backgroundColor: '#409ddb',
+    paddingTop: 10,
     paddingBottom: 2,
   },
   titleLabel: {
